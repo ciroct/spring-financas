@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.unisantos.financas.model.Categoria;
-import br.unisantos.financas.repository.CategoriaRepository;
+import br.unisantos.financas.repositories.CategoriaRepository;
 
 @Service
 public class CategoriaService implements ServiceInterface<Categoria> {

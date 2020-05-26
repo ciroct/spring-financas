@@ -14,51 +14,57 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.unisantos.financas.model.Categoria;
-import br.unisantos.financas.services.CategoriaService;
+import br.unisantos.financas.model.PessoaFisica;
+import br.unisantos.financas.services.PessoaFisicaService;
+
 
 @RestController
-@RequestMapping("/categorias")
-public class CategoriaResource implements ResourceInterface<Categoria> {
+@RequestMapping("/pessoas_fisicas")
+public class PessoaFisicaResource implements ResourceInterface<PessoaFisica> {
 
 	@Autowired
-	private CategoriaService categoriaService;
+	private PessoaFisicaService pfService;
+	
+	
+	public PessoaFisicaResource() {
+	}
 
 	@Override
 	@GetMapping
-	public ResponseEntity<List<Categoria>> get() {
-		return ResponseEntity.ok(categoriaService.findAll());
+	public ResponseEntity<List<PessoaFisica>> get() {		
+		return ResponseEntity.ok(pfService.findAll());
 	}
 
 	@Override
-	@GetMapping(value = "/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-		Categoria _categoria = categoriaService.findById(id);
-		if (_categoria != null)
-			return ResponseEntity.ok(_categoria);
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
-
-	@Override
-	@PostMapping
-	public ResponseEntity<Categoria> post(@RequestBody Categoria obj) {
-		categoriaService.create(obj);
-		return ResponseEntity.ok(obj);
-	}
-
-	@Override
-	@PutMapping
-	public ResponseEntity<?> put(@RequestBody Categoria obj) {
-		if (categoriaService.update(obj)) {
-			return ResponseEntity.ok(obj);
+		PessoaFisica _pf = pfService.findById(id);
+		if (_pf != null) {
+			return ResponseEntity.ok(_pf);
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@Override
+	@PostMapping
+	public ResponseEntity<PessoaFisica> post(@RequestBody PessoaFisica obj) {
+		pfService.create(obj);
+		return ResponseEntity.ok(obj);
+	}
+
+	@Override
+	@PutMapping
+	public ResponseEntity<?> put(@RequestBody PessoaFisica obj) {
+		if (pfService.update(obj)) {
+			return ResponseEntity.ok(obj);				
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();		
+	}
+
+	@Override
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-		if (categoriaService.delete(id)) {
+		if (pfService.delete(id)) {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

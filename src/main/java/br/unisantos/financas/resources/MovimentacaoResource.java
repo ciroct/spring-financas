@@ -14,51 +14,53 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.unisantos.financas.model.Categoria;
-import br.unisantos.financas.services.CategoriaService;
+import br.unisantos.financas.model.Movimentacao;
+import br.unisantos.financas.services.MovimentacaoService;
+
 
 @RestController
-@RequestMapping("/categorias")
-public class CategoriaResource implements ResourceInterface<Categoria> {
+@RequestMapping("/movimentacoes")
+public class MovimentacaoResource implements ResourceInterface<Movimentacao> {
 
 	@Autowired
-	private CategoriaService categoriaService;
-
+	private MovimentacaoService movService;
+	
 	@Override
 	@GetMapping
-	public ResponseEntity<List<Categoria>> get() {
-		return ResponseEntity.ok(categoriaService.findAll());
+	public ResponseEntity<List<Movimentacao>> get() {		
+		return ResponseEntity.ok(movService.findAll());
 	}
 
 	@Override
-	@GetMapping(value = "/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-		Categoria _categoria = categoriaService.findById(id);
-		if (_categoria != null)
-			return ResponseEntity.ok(_categoria);
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
-
-	@Override
-	@PostMapping
-	public ResponseEntity<Categoria> post(@RequestBody Categoria obj) {
-		categoriaService.create(obj);
-		return ResponseEntity.ok(obj);
-	}
-
-	@Override
-	@PutMapping
-	public ResponseEntity<?> put(@RequestBody Categoria obj) {
-		if (categoriaService.update(obj)) {
-			return ResponseEntity.ok(obj);
+		Movimentacao _mov = movService.findById(id);
+		if (_mov != null) {
+			return ResponseEntity.ok(_mov);
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@Override
-	@DeleteMapping(value = "/{id}")
+	@PostMapping
+	public ResponseEntity<Movimentacao> post(@RequestBody Movimentacao obj) {
+		movService.create(obj);
+		return ResponseEntity.ok(obj);
+	}
+
+	@Override
+	@PutMapping
+	public ResponseEntity<?> put(@RequestBody Movimentacao obj) {
+		if (movService.update(obj)) {
+			return ResponseEntity.ok(obj);				
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();		
+	}
+
+	@Override
+	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-		if (categoriaService.delete(id)) {
+		if (movService.delete(id)) {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

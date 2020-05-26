@@ -14,51 +14,56 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.unisantos.financas.model.Categoria;
-import br.unisantos.financas.services.CategoriaService;
+import br.unisantos.financas.model.PessoaJuridica;
+import br.unisantos.financas.services.PessoaJuridicaService;
+
 
 @RestController
-@RequestMapping("/categorias")
-public class CategoriaResource implements ResourceInterface<Categoria> {
+@RequestMapping("/pessoas_juridicas")
+public class PessoaJuridicaResource implements ResourceInterface<PessoaJuridica> {
 
 	@Autowired
-	private CategoriaService categoriaService;
+	private PessoaJuridicaService pjService;
+	
+	public PessoaJuridicaResource() {
+	}
 
 	@Override
 	@GetMapping
-	public ResponseEntity<List<Categoria>> get() {
-		return ResponseEntity.ok(categoriaService.findAll());
+	public ResponseEntity<List<PessoaJuridica>> get() {		
+		return ResponseEntity.ok(pjService.findAll());
 	}
 
 	@Override
-	@GetMapping(value = "/{id}")
+	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-		Categoria _categoria = categoriaService.findById(id);
-		if (_categoria != null)
-			return ResponseEntity.ok(_categoria);
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-	}
-
-	@Override
-	@PostMapping
-	public ResponseEntity<Categoria> post(@RequestBody Categoria obj) {
-		categoriaService.create(obj);
-		return ResponseEntity.ok(obj);
-	}
-
-	@Override
-	@PutMapping
-	public ResponseEntity<?> put(@RequestBody Categoria obj) {
-		if (categoriaService.update(obj)) {
-			return ResponseEntity.ok(obj);
+		PessoaJuridica _pj = pjService.findById(id);
+		if (_pj != null) {
+			return ResponseEntity.ok(_pj);
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@Override
+	@PostMapping
+	public ResponseEntity<PessoaJuridica> post(@RequestBody PessoaJuridica obj) {
+		pjService.create(obj);
+		return ResponseEntity.ok(obj);
+	}
+
+	@Override
+	@PutMapping
+	public ResponseEntity<?> put(@RequestBody PessoaJuridica obj) {
+		if (pjService.update(obj)) {
+			return ResponseEntity.ok(obj);				
+		}
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();		
+	}
+
+	@Override
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-		if (categoriaService.delete(id)) {
+		if (pjService.delete(id)) {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
