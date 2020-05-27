@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import br.unisantos.financas.model.Conta;
 import br.unisantos.financas.services.ContaService;
 
+
+
 @RestController
 @RequestMapping("/contas")
 public class ContaResource implements ResourceInterface<Conta> {
@@ -50,7 +52,7 @@ public class ContaResource implements ResourceInterface<Conta> {
 
 	@GetMapping(value = "/banco/{banco}/{from}/{to}")
 	public ResponseEntity<?> getByBancoENumero(@PathVariable("banco") String banco,
-			@PathVariable Integer from, @PathVariable Integer to) {
+			@PathVariable("from") Integer from, @PathVariable("to") Integer to) {
 		return ResponseEntity.ok(contas.listarPorBancoENumero(banco, from, to));
 	}
 
