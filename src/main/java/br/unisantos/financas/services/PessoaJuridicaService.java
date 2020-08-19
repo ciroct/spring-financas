@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.unisantos.financas.model.PessoaJuridica;
@@ -15,11 +16,15 @@ public class PessoaJuridicaService implements ServiceInterface<PessoaJuridica> {
 	@Autowired
 	private PessoaJuridicaRepository repo;
 	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
+	
 	public PessoaJuridicaService() {
 	}
 	
 	@Override
 	public PessoaJuridica create(PessoaJuridica obj) {
+		obj.setSenha(passwordEncoder.encode(obj.getSenha()));
 		repo.save(obj);
 		return obj;
 	}
