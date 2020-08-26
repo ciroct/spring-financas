@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.unisantos.financas.exception.AuthorizationException;
 import br.unisantos.financas.model.PessoaFisica;
 import br.unisantos.financas.services.PessoaFisicaService;
 
@@ -38,11 +39,15 @@ public class PessoaFisicaResource implements ResourceInterface<PessoaFisica> {
 	@Override
 	@GetMapping("/{id}")
 	public ResponseEntity<?> getById(@PathVariable("id") Long id) {
-		PessoaFisica _pf = pfService.findById(id);
-		if (_pf != null) {
-			return ResponseEntity.ok(_pf);
+		try {
+			PessoaFisica _pf = pfService.findById(id);
+			if (_pf != null) {
+				return ResponseEntity.ok(_pf);
+			}
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		} catch (AuthorizationException e) {
+			return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
 		}
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 	}
 
 	@Override
